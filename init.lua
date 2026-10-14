@@ -105,8 +105,7 @@ vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
 
-vim.opt.number = true
-vim.opt.relativenumber = true
+
 vim.opt.wrap = false
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
