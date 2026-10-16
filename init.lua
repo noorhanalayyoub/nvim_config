@@ -41,6 +41,9 @@ require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
   },
+  {
+  "mfussenegger/nvim-lint",
+  },
 
   {
     "hrsh7th/nvim-cmp",
@@ -58,10 +61,6 @@ require("lazy").setup({
     "hrsh7th/cmp-path",
   },
 
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-  },
 })
 
 local cmp = require("cmp")
@@ -75,6 +74,7 @@ cmp.setup({
     ["<S-Tab>"] = cmp.mapping.select_prev_item(),
   }),
 
+
   sources = {
     { name = "nvim_lsp" },
     { name = "buffer" },
@@ -82,6 +82,17 @@ cmp.setup({
   },
 })
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
+local lint = require("lint")
+
+lint.linters_by_ft = {
+  python = { "flake8" },
+}
+
+vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
+  callback = function()
+    lint.try_lint()
+  end,
+})
 
 vim.lsp.config("clangd", {
   capabilities = capabilities,
@@ -104,7 +115,6 @@ vim.diagnostic.config({
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
-
 
 vim.opt.wrap = false
 vim.opt.ignorecase = true
