@@ -131,3 +131,19 @@ vim.opt.expandtab = true
 vim.keymap.set("n", "<leader>w", ":w<CR>")
 vim.keymap.set("n", "<leader>q", ":q<CR>")
 vim.keymap.set("n", "<Esc>", ":noh<CR>")
+vim.o.laststatus = 2
+
+function GitBranch()
+    local branch = vim.fn.system(
+        "git branch --show-current 2>/dev/null"
+    )
+    branch = vim.fn.trim(branch)
+
+    if branch == "" then
+        return ""
+    end
+
+    return " [" .. branch .. "]"
+end
+
+vim.o.statusline = "%f %h%m%r%=%{v:lua.GitBranch()}"
